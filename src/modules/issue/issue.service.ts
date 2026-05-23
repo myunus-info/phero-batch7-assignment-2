@@ -114,12 +114,14 @@ const updateIssue = async (payload: UpdateIssuePayload) => {
 
   const issue = issueResult.rows[0];
 
-  if (issue.reporter_id !== reporter_id) {
-    throw new Error('Forbidden: contributors can only update their own issues');
-  }
+  if (user_role !== 'maintainer') {
+    if (issue.reporter_id !== reporter_id) {
+      throw new Error('Forbidden: contributors can only update their own issues');
+    }
 
-  if (issue.status !== 'open') {
-    throw new Error('Forbidden: contributors can only update issues when status is open');
+    if (issue.status !== 'open') {
+      throw new Error('Forbidden: contributors can only update issues when status is open');
+    }
   }
 
   const fields: string[] = [];
